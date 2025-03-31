@@ -3,7 +3,7 @@ import About from "@/components/about"
 import Skills from "@/components/skills"
 import Projects from "@/components/projects"
 import Contact from "@/components/contact"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "next-themes"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 
