@@ -30,9 +30,9 @@ export default function Hero() {
               alt="Profile picture"
               width={400}
               height={400}
-              className="w-full h-full object-cover scale-[1.8] translate-y-12 -translate-x-2
+              className="w-full h-full object-cover object-[center_12%] scale-100
                 transition-transform duration-700 ease-in-out
-                group-hover:scale-[1.9]"
+                group-hover:scale-[1.05]"
               priority
             />
           </div>

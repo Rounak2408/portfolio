@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { MapPinIcon, MailIcon, PhoneIcon, SendIcon, CheckCircle } from "lucide-react"
-import { Toaster, toast } from "sonner"
+import { toast } from "sonner"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -82,9 +82,6 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-20 bg-background">
-      {/* Add Toaster component at the root */}
-      <Toaster position="top-center" expand={true} richColors />
-      
       <div className="container px-4 mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

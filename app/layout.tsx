@@ -6,7 +6,7 @@ import { Toaster } from "sonner"
 export const metadata: Metadata = {
   title: "Portfolio",
   description: "My portfolio website",
-  generator: "v0.dev",
+  generator: "Rounak",
 }
 
 export default function RootLayout({

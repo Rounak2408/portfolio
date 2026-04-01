@@ -46,7 +46,7 @@ export default function About() {
                 src="/about.jpg"
                 alt="About Me"
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-110"
+                className="object-cover object-[center_8%] transition-transform duration-300 group-hover:scale-105"
                 priority
               />
             </div>
@@ -79,9 +79,11 @@ export default function About() {
                   Hire Me
                 </Link>
               </Button>
-              <Button variant="outline" className="w-full sm:w-auto gap-2">
-                <DownloadIcon size={20} />
-                Download CV
+              <Button asChild variant="outline" className="w-full sm:w-auto gap-2">
+                <a href="/Rounak-CV.pdf" download="Rounak-CV.pdf">
+                  <DownloadIcon size={20} />
+                  Download CV
+                </a>
               </Button>
             </div>
           </motion.div>

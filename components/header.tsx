@@ -2,25 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { 
-  MoonIcon, 
-  SunIcon, 
-  MenuIcon, 
-  XIcon,
-  Palette,
-  Globe,
-  ChevronDown
-} from "lucide-react"
-import { useTheme } from "next-themes"
+import { MenuIcon, XIcon } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { themes } from "@/lib/themes"
+import { toast } from "sonner"
 import { ThemeSwitcher } from "./theme-switcher"
 
 const navItems = [
@@ -34,28 +19,26 @@ const navItems = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
   const isMobile = useIsMobile()
 
-  // Add language state and toggle function
-  const [language, setLanguage] = useState('en')
+  const [hasShownScrollToast, setHasShownScrollToast] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+      const y = window.scrollY
+      setIsScrolled(y > 10)
+
+      if (!hasShownScrollToast && y > 500) {
+        setHasShownScrollToast(true)
+        toast("Scroll to explore", {
+          description: "Projects, skills, and contact are below.",
+          duration: 2500,
+        })
+      }
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === 'en' ? 'es' : 'en')
-    // You can add your language switching logic here
-  }
+  }, [hasShownScrollToast])
 
   const handleRefresh = () => {
     window.location.reload()
@@ -94,7 +77,7 @@ export default function Header() {
           )}
 
           {/* Theme Dropdown */}
-          <ThemeSwitcher />
+          {!isMobile && <ThemeSwitcher />}
 
 
         </nav>
@@ -121,6 +104,11 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+
+            <div className="pt-2 border-t border-border/50 flex items-center justify-between">
+              <span className="text-foreground/80">Theme</span>
+              <ThemeSwitcher />
+            </div>
           </nav>
         </div>
       )}

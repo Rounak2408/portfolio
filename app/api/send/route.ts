@@ -1,50 +1,74 @@
-import { NextResponse } from 'next/server';
-import * as nodemailer from 'nodemailer';
+import { NextResponse } from "next/server"
+import * as nodemailer from "nodemailer"
+
+type ContactPayload = {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+function normalizeEnv(value?: string) {
+  if (!value) return ""
+  return value.trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1")
+}
 
 export async function POST(req: Request) {
-  if (!process.env.GMAIL_USER || !process.env.PASSKEY) {
-    console.error('Missing email configuration');
+  const smtpUser = normalizeEnv(process.env.SMTP_USER || process.env.GMAIL_USER)
+  const smtpPass = normalizeEnv(process.env.SMTP_PASS || process.env.PASSKEY)
+
+  if (!smtpUser || !smtpPass) {
+    console.error("Missing email configuration")
     return NextResponse.json(
       { error: "Server configuration error" },
       { status: 500 }
-    );
+    )
   }
 
   try {
-    const { name, email, subject, message } = await req.json();
+    const payload = (await req.json()) as Partial<ContactPayload>
+    const name = payload.name?.trim() || ""
+    const email = payload.email?.trim() || ""
+    const subject = payload.subject?.trim() || ""
+    const message = payload.message?.trim() || ""
 
-    // Validate required fields
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
-      );
+      )
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isValidEmail(email)) {
       return NextResponse.json(
         { error: "Invalid email format" },
-        { status: 400 } 
-      );
+        { status: 400 }
+      )
     }
 
-    // Create transporter outside try block to test configuration
+    if (name.length > 100 || subject.length > 150 || message.length > 5000) {
+      return NextResponse.json(
+        { error: "Input too long" },
+        { status: 400 }
+      )
+    }
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.PASSKEY
-      }
-    });
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    })
 
-    // Test the connection
-    await transporter.verify();
-
-    const mailOptions = {
-      from: process.env.GMAIL_USER,
-      to: process.env.GMAIL_USER,
+    const ownerMailOptions = {
+      from: smtpUser,
+      to: smtpUser,
+      replyTo: email,
       subject: `Portfolio Contact: ${subject}`,
       html: `
         <!DOCTYPE html>
@@ -144,20 +168,44 @@ export async function POST(req: Request) {
           </body>
         </html>
       `
-    };
+    }
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', info.messageId);
+    const ownerMailInfo = await transporter.sendMail(ownerMailOptions)
+
+    await transporter.sendMail({
+      from: smtpUser,
+      to: email,
+      subject: "Thanks for contacting me",
+      html: `
+        <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #111;">
+          <h2 style="margin-bottom: 8px;">Thanks for reaching out, ${name}!</h2>
+          <p style="margin-top: 0;">I received your message and will get back to you soon.</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
+          <p style="margin: 0 0 8px 0;"><strong>Your subject:</strong> ${subject}</p>
+          <p style="margin: 0;"><strong>Your message:</strong></p>
+          <p style="white-space: pre-wrap;">${message}</p>
+        </div>
+      `,
+    })
+
+    console.log("Message sent:", ownerMailInfo.messageId)
 
     return NextResponse.json(
       { message: "Email sent successfully" },
       { status: 200 }
-    );
+    )
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error)
+    const err = error as { code?: string; message?: string }
+    const isAuthError = err?.code === "EAUTH"
+
     return NextResponse.json(
-      { error: "Failed to send email", details: (error as Error).message },
+      {
+        error: isAuthError
+          ? "Email authentication failed. Check SMTP credentials."
+          : "Failed to send email",
+      },
       { status: 500 }
-    );
+    )
   }
-} 
+}

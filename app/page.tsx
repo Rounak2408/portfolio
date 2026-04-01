@@ -9,7 +9,7 @@ import Footer from "@/components/footer"
 
 export default function Home() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider defaultAttribute="class" defaultTheme="system" enableSystem>
       <div className="min-h-screen bg-background text-foreground">
         <Header />
         <main>
