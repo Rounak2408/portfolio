@@ -111,32 +111,63 @@ export default function Contact() {
                 <h3 className="text-xl font-bold mb-8 text-card-foreground">Contact Information</h3>
                 <div className="space-y-12">
                   <div className="flex flex-col items-center gap-4">
-                    <div className="bg-primary/10 p-4 rounded-full">
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Rajkot%2C+Gujarat%2C+India"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open Rajkot location on Google Maps"
+                      className="bg-primary/10 p-4 rounded-full hover:bg-primary/20 transition-colors"
+                    >
                       <MapPinIcon className="h-8 w-8 text-primary" />
-                    </div>
+                    </a>
                     <div>
                       <h4 className="font-medium mb-2 text-card-foreground">Location</h4>
-                      <p className="text-muted-foreground">Rajkot, Gujarat, India</p>
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=Rajkot%2C+Gujarat%2C+India"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Rajkot, Gujarat, India
+                      </a>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-center gap-4">
-                    <div className="bg-primary/10 p-4 rounded-full">
+                    <a
+                      href="mailto:rounakkeshri79@gmail.com"
+                      aria-label="Send email to rounakkeshri79@gmail.com"
+                      className="bg-primary/10 p-4 rounded-full hover:bg-primary/20 transition-colors"
+                    >
                       <MailIcon className="h-8 w-8 text-primary" />
-                    </div>
+                    </a>
                     <div>
                       <h4 className="font-medium mb-2 text-card-foreground">Email</h4>
-                      <p className="text-muted-foreground">rounakkeshri79@gmail.com</p>
+                      <a
+                        href="mailto:rounakkeshri79@gmail.com"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        rounakkeshri79@gmail.com
+                      </a>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-center gap-4">
-                    <div className="bg-primary/10 p-4 rounded-full">
+                    <a
+                      href="tel:+918294341139"
+                      aria-label="Call +91 8294341139"
+                      className="bg-primary/10 p-4 rounded-full hover:bg-primary/20 transition-colors"
+                    >
                       <PhoneIcon className="h-8 w-8 text-primary" />
-                    </div>
+                    </a>
                     <div>
                       <h4 className="font-medium mb-2 text-card-foreground">Phone</h4>
-                      <p className="text-muted-foreground">+91 8294341139</p>
+                      <a
+                        href="tel:+918294341139"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        +91 8294341139
+                      </a>
                     </div>
                   </div>
                 </div>
