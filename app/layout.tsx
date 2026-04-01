@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Portfolio",
   description: "My portfolio website",
   generator: "Rounak",
+  verification: {
+    google: "oHU9IigcFWD1Ko1G9WBR7MqdIVxlhHliHJOL5eYDzdE",
+  },
 }
 
 export default function RootLayout({
